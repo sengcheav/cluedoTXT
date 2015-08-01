@@ -11,7 +11,7 @@ import Item.Item;
 import Item.stairWell;
 import Piece.Characters;
 import Piece.IllegalParameterException;
-import Piece.Piece;
+import Piece.Piece.*;
 import Piece.Room;
 import Piece.Weapon;
 import Player.Player;
@@ -22,6 +22,8 @@ import Square.blankSpace;
 public class Board {
 	
 	private int numOfPlayer ; 
+	private static int turn =0 ; 
+	private Dice dice = new Dice() ; 
 	private Square square[][] =  new Square[25][25];
 	
 	private ArrayList<Characters> characterList = new ArrayList<Characters>(); 
@@ -34,12 +36,13 @@ public class Board {
 	private ArrayList<Card> roomCard = new ArrayList<Card>(); 
 	private ArrayList<Card> solution = new ArrayList<Card>() ; 
 	private ArrayList<Card> cardLeft = new ArrayList<Card>(); 
+	 
+	
+	private boolean finished = false ;  // Game state  
 	
 	public Board() {
-		Scanner reader = new Scanner(System.in);
-		System.out.println("How many players ?");
-		int a = reader.nextInt() ; 
-		this.numOfPlayer = 5 ; 
+		
+		this.numOfPlayer = ask("How many Players?") ; 
 		CharacterSetup();
 		PlayerSetup();
 		RoomSetup() ;
@@ -47,8 +50,16 @@ public class Board {
 		cardSetup() ;
 		solutionSetup() ;
 		dealCard( cardLeft , playerList);
-		System.out.println(" ------"+ a );
+		squareSetup();
+		System.out.println(" ------"+ this.numOfPlayer );
 	
+	}
+	
+	public int ask( String message){
+		Scanner s = new Scanner(System.in);
+		System.out.println(message);
+		int number = s.nextInt() ; 
+		return number ; 
 	}
 	
 	public void PlayerSetup() {
@@ -196,7 +207,6 @@ public class Board {
 		Item i1 = iList.get(0) ; 
 		Square s1 = new Square (i1 , "#");
 			
-		
 		Square B = new Square ( roomList.get(1) , "B");  //Ballroom
 		Square c = new Square ( roomList.get(2) , "c");
 		ArrayList<Item> iList2 = roomList.get(2).getContains();
@@ -218,7 +228,7 @@ public class Board {
 		
 		Square D = new Square ( roomList.get(8) , "d");
 		Square cl = new Square (roomList.get(9) , "*") ; 
-		Square H = new Square ( new Hallway("Hallway"), "H");  // Hallway 
+		Square H = new Square ( new Hallway("Hallway"), " ");  // Hallway 
 		Square d = new Square ( new Door("d"), "d"); 
 		Square p1 = new Spawn(characterList.get(0) ,"1" ) ;  // Miss_Scarlett
 		Square p2 = new Spawn(characterList.get(1) ,"2" ) ; //Colonel_Mustard
@@ -226,10 +236,11 @@ public class Board {
 		Square p4 = new Spawn(characterList.get(3) ,"4" ) ; //The_Reverend_Green
 		Square p5 = new Spawn(characterList.get(4) ,"5" ) ; //Mrs_Peacock
 		Square p6 = new Spawn(characterList.get(5) ,"6" ) ; //Professor_Plum
-		Square z =  (new blankSpace("b" , "-") ); 
+		Square z =  (new blankSpace("b" , "/") ); 
+		
 		Square square1[][]  = {
-				{z,z,z,z,z,z,z,z,z,z,p1,z,z,z,z,p2,z,z,z,z,z,z,z,z,z},
-				{z,k,k,k,k,k,s1,z,H,H,H,B,B,B,B,H,H,H,z,c,c,c,c,c,c },
+				{z,z,z,z,z,z,z,z,z,z,p1,z,z,z,z,p2,z,z,z,z,z,z,z,z,z} ,
+				{z,k,k,k,k,k,s1,z,H,H,H,B,B,B,B,H,H,H,z,c,c,c,c,c,c } ,
 				{z,k,k,k,k,k,k,H,H,B,B,B,B,B,B,B,B,H,H,c,c,c,c,c,c} , 
 				{z,k,k,k,k,k,k,H,H,B,B,B,B,B,B,B,B,H,H,c,c,c,c,c,c} , 
 				{z,k,k,k,k,k,k,H,H,B,B,B,B,B,B,B,B,H,H,d,c,c,c,c,c} , 
@@ -243,7 +254,7 @@ public class Board {
 				{z,D,D,D,D,D,D,D,d,H,H,cl,cl,cl,cl,cl,H,H,H,b,b,b,b,d,b} ,
 				{z,D,D,D,D,D,D,D,D,H,H,cl,cl,cl,cl,cl,H,H,H,H,H,H,H,H,z} ,
 				{z,D,D,D,D,D,D,D,D,H,H,cl,cl,cl,cl,cl,H,H,H,l,l,d,l,l,z} ,
-				{z,D,D,D,D,D,D,d,D,H,H,cl,cl,cl,cl,cl,H,H,l,l,l,d,l,l,l} ,
+				{z,D,D,D,D,D,D,d,D,H,H,cl,cl,cl,cl,cl,H,H,l,l,l,l,l,l,l} ,
 				{z,H,H,H,H,H,H,H,H,H,H,cl,cl,cl,cl,cl,H,H,d,l,l,l,l,l,l} ,
 				{z,p4,H,H,H,H,H,H,H,H,H,H,H,H,H,H,H,H,l,l,l,l,l,l,l} ,
 				{z,z,H,H,H,H,H,H,H,H,h,h,d,d,h,h,H,H,H,l,l,l,l,l,z} ,
@@ -253,8 +264,6 @@ public class Board {
 				{z,L,L,L,L,L,L,L,H,H,h,h,h,h,h,h,H,H,s,s,s,s,s,s,s} ,
 				{z,L,L,L,L,L,L,L,H,H,h,h,h,h,h,h,H,H,s,s,s,s,s,s,s} ,
 				{z,L,L,L,L,L,L,L,p6,H,h,h,h,h,h,h,H,H,s,s,s,s,s,s,s} 
-				
-				
 				
 		};
 		square = square1 ;  
@@ -294,9 +303,12 @@ public class Board {
 				cardLeft.add(weaponCard.get(i)); 
 			}
 		}	
-		
 	}
 	
+	
+	/*
+	 * Deal the card left from solution to the player evenly 
+	 */
 	public void dealCard( ArrayList<Card> cardleft , ArrayList<Player> playerlist){
 		for (int i = 0 ; i < playerlist.size() ; i++){
 			int cardIndex = i ; 
@@ -308,7 +320,6 @@ public class Board {
 			}
 		}
 	}
-	
 	
 	public static void main (String args[]){
 		Board b = new Board();
@@ -342,13 +353,11 @@ public class Board {
 						+" :" + c.getName()); 
 			}
 		}
-		b.squareSetup();
+		
 		for (int i =0 ; i<25 ; i++ ){//
 			System.out.println();
-			//System.out.println("\n" + " _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
 			
 			for (int ia =0 ; ia<25 ; ia++ ){
-				//System.out.println(i ); 
 				System.out.print("|"+b.square[i][ia].getC());
 			}
 		}

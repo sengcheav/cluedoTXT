@@ -1,11 +1,14 @@
 package Square;
 
+import Piece.Characters;
 import Piece.Piece;
+import Player.Player;
 
 public class Square<T> {
 private T contain ; 
 private Position position ;
 private String c ; 
+private Player on ; 
 
 
 public Square(T i, String c ){
@@ -21,12 +24,29 @@ public T getContain(){
 	return this.contain ; 
 }
 
-private void setPosition ( int x , int y ){
+public void setPosition ( int x , int y ){
 	this.position = new Position(x,y); 
+}
+
+public boolean setCharactersOn( Player player){
+	if(on == null){
+		this.on = player ; 
+		return true ; 
+	}
+	return false ;
+}
+
+public Player getCharactersON(){
+	return this.on ; 
+}
+
+public void removeCharactersOn(){
+	this.on = null ; 
 }
 
 public String getC(){
 	return this.c ; 
 }
+
 
 }
