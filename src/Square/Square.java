@@ -1,7 +1,10 @@
 package Square;
 
+import Item.Door;
+import Item.Hallway;
 import Piece.Characters;
 import Piece.Piece;
+import Piece.Room;
 import Player.Player;
 
 public class Square<T> {
@@ -46,6 +49,52 @@ public void removeCharactersOn(){
 
 public String getC(){
 	return this.c ; 
+}
+
+public boolean isContainHall(){
+	if (this.contain instanceof Hallway){
+		return true; 
+	}
+	return false ;
+}
+
+public boolean isContainDoor(){
+	if (this.contain instanceof Door){
+		return true; 
+	}
+	return false ;
+}
+
+public boolean isContainBlankSpace(){
+	if (this.contain instanceof blankSpace){
+		return true; 
+	}
+	return false ;
+}
+
+public boolean isContainRoom(){
+	if (this.contain instanceof Room){
+		return true; 
+	}
+	return false ;
+}
+
+public boolean isContainSpawn(){
+	if (this.contain instanceof Spawn){
+		return true; 
+	}
+	return false ;
+}
+
+public boolean isContainClue(){
+	if (this.contain instanceof Room){
+		Room r = (Room)contain ; 
+		if(r.getName().equals("clue")){
+			return true; 
+		}
+		
+	}
+	return false ;
 }
 
 

@@ -22,8 +22,8 @@ private String type  ;
 			return true ;
 		}else if(other == null){ 
 			return false;
-		}else if (this.getClass() != other.getClass()){
-			return false ;
+		//}else if (this.getClass() != other.getClass()){
+			//return false ;
 		}else if (this.getName() == null || other.getName() == null ){
 			return false ;
 		}else if (!this.getName().equals(other.getName())){
@@ -36,4 +36,6 @@ private String type  ;
 	public String getName(){
 		return this.piece.getName() ; 
 	} 
+	
+	
 }

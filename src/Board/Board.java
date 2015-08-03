@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import Card.Card;
+import Card.RoomCard;
 import Item.Door;
 import Item.Hallway;
 import Item.Item;
 import Item.stairWell;
 import Piece.Characters;
 import Piece.IllegalParameterException;
+import Piece.Piece;
 import Piece.Piece.*;
 import Piece.Room;
 import Piece.Weapon;
@@ -33,10 +35,10 @@ public class Board {
 	
 	private ArrayList<Card> weaponCard = new ArrayList<Card>(); 
 	private ArrayList<Card> charactersCard = new ArrayList<Card>(); 
-	private ArrayList<Card> roomCard = new ArrayList<Card>(); 
+	private static ArrayList<Card> roomCard = new ArrayList<Card>(); 
 	private ArrayList<Card> solution = new ArrayList<Card>() ; 
-	private ArrayList<Card> cardLeft = new ArrayList<Card>(); 
-	 
+	private static ArrayList<Card> cardLeft = new ArrayList<Card>(); 
+	private static int currentTurn = 0 ;
 	
 	private boolean finished = false ;  // Game state  
 	
@@ -66,6 +68,15 @@ public class Board {
 		for ( int i = 0 ; i < this.numOfPlayer ; i++ ){
 			playerList.add(new Player(i)) ; 
 		}
+	}
+	
+	public int whoturn(){
+		if(this.currentTurn == numOfPlayer -1 ){
+			currentTurn = 0 ;
+			return 0 ; 
+		}
+		currentTurn++;
+		return currentTurn;
 	}
 
 	public void CharacterSetup() {
@@ -315,11 +326,12 @@ public class Board {
 			while(cardIndex < cardleft.size()){
 				 playerlist.get(i).addContainsCard(cardleft.get(cardIndex)); 
 				 System.out.println(i + " :"+ cardIndex ); 
-				 cardIndex += playerlist.size() ;
-				 
+				 cardIndex += playerlist.size() ;	 
 			}
 		}
 	}
+	
+	
 	
 	public static void main (String args[]){
 		Board b = new Board();
@@ -361,6 +373,23 @@ public class Board {
 				System.out.print("|"+b.square[i][ia].getC());
 			}
 		}
+		try { // this is return true 
+//			Card n = new Card (new Room("kitchen"));
+//			Card fromlist = cardLeft.get(0); 
+//			System.out.println(fromlist.getName());
+//			Card n1 = new Card (new Characters("Miss_Scarlett"));
+//			System.out.println(n1.equals(fromlist)) ;
+			
+			Card n = new Card (new Room("kitchen"));
+			
+			Card n1 = new RoomCard (new Piece("kitchen", "Room"));
+		
+			System.out.println(n1.equals(n)) ;
+		} catch (IllegalParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
 		
 	}
 }
