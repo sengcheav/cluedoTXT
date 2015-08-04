@@ -4,7 +4,7 @@ public class Position {
 private int x ;
 private int y ;
 
-public Position(int x ,int y){
+public Position(int y ,int x){
 	this.x = x ;
 	this.y = y ;
 }
@@ -30,6 +30,7 @@ public boolean diffXIsOne(  Position other){
 	if(  (xFrom- xTo == -1 || xFrom - xTo == 1) ){  
 		return true ; 
 	}
+	//System.out.println("xOne :f") ; 
 	return false ; 
 }
 
@@ -42,22 +43,26 @@ public boolean diffYIsOne(  Position other){
 	
 	if(  (yFrom- yTo == -1 || yFrom - yTo == 1) ){  
 		return true ; 
-	}
+	}//System.out.println("yOne :f") ; 
 	return false ; 
 }
 
 public boolean diffXIsZero(Position other){
 	if( this.x - other.x == 0){
 		return true ; 
-	}
+	}//System.out.println("x0 :f") ; 
 	return false ; 
 }
 
 public boolean diffYIsZero(Position other){
 	if( this.y - other.y == 0){
 		return true ; 
-	}
+	}//System.out.println("y0 :f") ; 
 	return false ; 
+}
+
+public String toString(){
+	return "Y  : " + this.y + " X: " +this.x;
 }
 
 }

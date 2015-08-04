@@ -11,6 +11,8 @@ private Room connectRoom ;
 		super(i, type);
 		// TODO Auto-generated constructor stub
 	}
+
+
 	
 	public void setInRoom(Room r ){
 		this.inRoom =r ; 

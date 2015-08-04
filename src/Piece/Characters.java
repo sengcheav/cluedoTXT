@@ -6,11 +6,11 @@ import Card.Card;
 
 public class Characters extends Piece{
 private String name ; 
-private boolean isMurder = false ; 
-private Room inRoom = null ; 
+//private boolean isMurder = false ; 
+//private Room inRoom = null ; 
 private static String type = "Characters"; 	
 private int indexInList ; 
-private ArrayList<Card> cardInHand = new ArrayList<Card>() ; 
+//sprivate ArrayList<Card> cardInHand = new ArrayList<Card>() ; 
 /*
 public enum String{
 	 Miss_Scarlett,
@@ -44,25 +44,25 @@ public Characters(String n ) throws IllegalParameterException{
 		
 }
 
-public String getCharacter(){
-	return this.name; 
-}
+//public String getCharacter(){
+//	return this.name; 
+//}
 
-public boolean isMurder(){
-	return this.isMurder; 
-}
+//public boolean isMurder(){
+//	return this.isMurder; 
+//}
+//
+//public void setMurder(boolean t){
+//	this.isMurder = t ; 
+//}
 
-public void setMurder(boolean t){
-	this.isMurder = t ; 
-}
-
-public Room inRoom(){
-	return this.inRoom; 
-}
-
-public void setInRoom(Room r){
-	this.inRoom = r ; 
-}
+//public Room inRoom(){
+//	return this.inRoom; 
+//}
+//
+//public void setInRoom(Room r){
+//	this.inRoom = r ; 
+//}
 
 public int getIndexInList(){
 	return this.indexInList; 

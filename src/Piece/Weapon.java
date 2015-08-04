@@ -2,7 +2,7 @@ package Piece;
 
 public class Weapon extends Piece{
 private String name ; 
-private Room inRoom ; 
+//private Room inRoom ; 
 private int indexInList ; 
 private static String type = "Weapon"; 
 /*
@@ -33,13 +33,13 @@ public String getWeapon() {
 
 }
 
-public Room getInRoom(){
-	return this.inRoom ; 
-}
+//public Room getInRoom(){
+//	return this.inRoom ; 
+//}
 
-public void setInRoom(Room r ){
-	this.inRoom = r ;  
-}
+//public void setInRoom(Room r ){
+//	this.inRoom = r ;  
+//}
 
 
 

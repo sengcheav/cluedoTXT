@@ -12,6 +12,13 @@ public Spawn(Piece p , String c ){
 		
 	}
 
+public Spawn(Piece p , String c , Position po){
+	
+	super(p ,c, po ); 
+	this.piece = p ; 
+	
+}
+
 public Piece getPiece(){
 	return this.piece ; 
 }

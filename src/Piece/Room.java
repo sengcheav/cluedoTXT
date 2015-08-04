@@ -33,20 +33,20 @@ public Room(String name) throws IllegalParameterException{
 	
 
 
-public void setContainWeapon(Weapon w){
-	this.containWepon =w ; 
-}
-public Weapon getContainWeapon() {
-	return this.containWepon ; 
-}
-
-public void setContainCharacter( Character c) {
-	this.containCharacter = c ;  
-}
-
-public Character getContainCharcter(){
-	return this.containCharacter ; 
-}
+//public void setContainWeapon(Weapon w){
+//	this.containWepon =w ; 
+//}
+//public Weapon getContainWeapon() {
+//	return this.containWepon ; 
+//}
+//
+//public void setContainCharacter( Character c) {
+//	this.containCharacter = c ;  
+//}
+//
+//public Character getContainCharcter(){
+//	return this.containCharacter ; 
+//}
 
 public void addContains(Item i){
 	this.contains.add(i);

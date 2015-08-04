@@ -26,17 +26,17 @@ public Piece ( String n , String t ) throws IllegalParameterException{
 		if(!n.equals("kitchen") && !n.equals("ballroom") && !n.equals("conservatory") && !n.equals("library") && 
 	       !n.equals("billiardroom") && !n.equals("study") && !n.equals("hall") &&!n.equals("lounge") && 
 	       !n.equals("diningroom")	&& !n.equals("clue")){
-			throw new IllegalParameterException("Check the Legal String to fit type Room") ; 
+			throw new IllegalParameterException("Check the Legal String to fit type Room : -"+ n) ; 
 		}
 	}else if (t.equals("Weapon")){
 		if(!n.equals("Candlestick") && !n.equals("Dagger") && !n.equals("Lead_Pipe") && !n.equals("Revolver") && 
 		   !n.equals("Rope") && !n.equals("Spanner")){
-					throw new IllegalParameterException("Check the Legal String to fit type Weapon") ; 
+					throw new IllegalParameterException("Check the Legal String to fit type Weapon : -"+ n) ; 
 				}
 	}else if (t.equals("Characters")){
 		if(!n.equals("Miss_Scarlett") && !n.equals("Colonel_Mustard") && !n.equals("Mrs_White") && 
 		   !n.equals("The_Reverend_Green") && !n.equals("Mrs_Peacock") && !n.equals("Professor_Plum")){
-					throw new IllegalParameterException("Check the Legal String to fit type Characters") ; 
+					throw new IllegalParameterException("Check the Legal String to fit type Characters : -"+n) ; 
 				}
 	}else {
 		throw new IllegalParameterException("Check the name String and type String ") ;

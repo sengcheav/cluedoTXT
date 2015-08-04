@@ -17,6 +17,7 @@ import Piece.Piece.*;
 import Piece.Room;
 import Piece.Weapon;
 import Player.Player;
+import Square.Position;
 import Square.Spawn;
 import Square.Square;
 import Square.blankSpace;
@@ -24,7 +25,6 @@ import Square.blankSpace;
 public class Board {
 	
 	private int numOfPlayer ; 
-	private static int turn =0 ; 
 	private Dice dice = new Dice() ; 
 	private Square square[][] =  new Square[25][25];
 	
@@ -38,13 +38,22 @@ public class Board {
 	private static ArrayList<Card> roomCard = new ArrayList<Card>(); 
 	private ArrayList<Card> solution = new ArrayList<Card>() ; 
 	private static ArrayList<Card> cardLeft = new ArrayList<Card>(); 
-	private static int currentTurn = 0 ;
+	private static int currentTurn = -1 ;
+	private boolean gameFinished = false ; 
 	
-	private boolean finished = false ;  // Game state  
+	 
+	
+	/**
+	 * The method will do all the setup 
+	 */
 	
 	public Board() {
 		
 		this.numOfPlayer = ask("How many Players?") ; 
+		while (this.numOfPlayer <3 || this.numOfPlayer > 6){
+			System.err.println("Must be between 3 - 6") ;
+			this.numOfPlayer = ask("How many Players? ") ; 
+		}
 		CharacterSetup();
 		PlayerSetup();
 		RoomSetup() ;
@@ -53,7 +62,9 @@ public class Board {
 		solutionSetup() ;
 		dealCard( cardLeft , playerList);
 		squareSetup();
-		System.out.println(" ------"+ this.numOfPlayer );
+		setupPlayerPosition() ;
+		System.out.println("Number of Players"+ this.numOfPlayer );
+		
 	
 	}
 	
@@ -70,13 +81,33 @@ public class Board {
 		}
 	}
 	
-	public int whoturn(){
-		if(this.currentTurn == numOfPlayer -1 ){
-			currentTurn = 0 ;
-			return 0 ; 
-		}
-		currentTurn++;
-		return currentTurn;
+
+	/*
+	 * This method run through the whole player list and check if the next
+	 * player is terminated or not , if not it will return index of the player
+	 * that go next otherwise it keep checking until it find the next player
+	 * by keep increment the currentTurn index by 1 ; 
+	 */
+	public int whoNext(){
+		
+			if(currentTurn ==-1){
+				currentTurn = 0 ;
+			}else if(this.currentTurn == numOfPlayer -1 ){
+				//System.out.println("IS in here");
+				currentTurn = 0 ;
+			}
+			else {
+				currentTurn++ ; 
+				//System.out.println("IS in here2");
+			}
+			
+			if(playerList.get(currentTurn).getTerminated()){
+				//System.out.println("IS in here3");
+				return whoNext() ; 
+			}
+				
+		return currentTurn; 
+		
 	}
 
 	public void CharacterSetup() {
@@ -237,7 +268,7 @@ public class Board {
 		Item i4 = iList4.get(0) ; 
 		Square s4 = new Square (i4 , "#");
 		
-		Square D = new Square ( roomList.get(8) , "d");
+		Square D = new Square ( roomList.get(8) , "D");
 		Square cl = new Square (roomList.get(9) , "*") ; 
 		Square H = new Square ( new Hallway("Hallway"), " ");  // Hallway 
 		Square d = new Square ( new Door("d"), "d"); 
@@ -248,7 +279,7 @@ public class Board {
 		Square p5 = new Spawn(characterList.get(4) ,"5" ) ; //Mrs_Peacock
 		Square p6 = new Spawn(characterList.get(5) ,"6" ) ; //Professor_Plum
 		Square z =  (new blankSpace("b" , "/") ); 
-		
+		 
 		Square square1[][]  = {
 				{z,z,z,z,z,z,z,z,z,z,p1,z,z,z,z,p2,z,z,z,z,z,z,z,z,z} ,
 				{z,k,k,k,k,k,s1,z,H,H,H,B,B,B,B,H,H,H,z,c,c,c,c,c,c } ,
@@ -278,9 +309,63 @@ public class Board {
 				
 		};
 		square = square1 ;  
-		
+		setupNewSquare();
 	}
 	
+	public void setupNewSquare(){
+		for( int i = 0 ; i< 25 ;i++){
+			for( int ii = 0 ; ii< 25 ;ii++){
+				String c = square[i][ii].getC() ; 
+				if (c.equals("k")||c.equals("B")||c.equals("c")||c.equals("D")||c.equals("b")
+				||c.equals("l") || c.equals("L") || c.equals("h") ||c.equals("*")){
+					Room r = (Room) square[i][ii].getContain() ; 
+					square[i][ii]= new Square(r, c , new Position(ii, i) );	
+				}else if (c.equals(" ") ){
+					
+					square[i][ii]= new Square(new Hallway("Hallway"), c , new Position(ii, i) );	
+				}else if (c.equals("d")){
+					Door door = new Door("Door") ; 
+					
+					square[i][ii]= new Square(door, c , new Position(ii, i) );	
+					Room r = square[i][ii].adjacentRoom(square); 
+					door.setInRoom(r); 
+				}else if (c.equals("1") || c.equals("2") ||  c.equals("3") ||  c.equals("4") ||  c.equals("5") || c.equals("6") ){
+					Characters ch = (Characters) square[i][ii].getContain() ;
+					square[i][ii]= new Spawn(ch, c , new Position(ii,i));	
+					
+				}else if (c.equals("/") ){
+					
+					square[i][ii]= new blankSpace("b", c , new Position(ii, i) );	
+					
+				}
+				else if (c.equals("#")  ){
+					square[i][ii] =new Square( new stairWell("stairWell","stairWell"),c,new Position(ii, i) );
+				}
+				
+			}
+		}
+	}
+	
+	public ArrayList<Position> positionList(){
+		ArrayList<Position> p = new ArrayList<Position>();
+		p.add(new Position(0,10));
+		p.add(new Position(0,15));
+		p.add(new Position(6,24));
+		p.add(new Position(17,1));
+		p.add(new Position(19,23));
+		p.add(new Position(24,10));
+		
+		return p; 
+			
+	}
+	
+	public void setupPlayerPosition(){
+		ArrayList<Position> p = positionList();
+		for( int i =0 ; i < playerList.size() ; i++){
+			playerList.get(i).setPos(p.get(i));
+			this.square[p.get(i).getY()][p.get(i).getX()].setCharactersOn(playerList.get(i));
+		}
+	}
 	
 	/*
 	 * In this method It will generate random number and by the number it generated 
@@ -325,16 +410,74 @@ public class Board {
 			int cardIndex = i ; 
 			while(cardIndex < cardleft.size()){
 				 playerlist.get(i).addContainsCard(cardleft.get(cardIndex)); 
-				 System.out.println(i + " :"+ cardIndex ); 
+				// System.out.println(i + " :"+ cardIndex ); 
 				 cardIndex += playerlist.size() ;	 
 			}
 		}
 	}
 	
+	/*
+	 * Get the status if the game has finished 
+	 * true if it is otherwise false will be return
+	 */
+	public boolean getGameFinished(){
+		return this.gameFinished ; 
+	}
 	
+	public void printBoard(){
+		System.out.println("_____________________________________________________");
+		for (int i =0 ; i<25 ; i++ ){//
+			System.out.println();
+			
+			for (int ia =0 ; ia<25 ; ia++ ){
+				System.out.print("|"+ square[i][ia].getC());
+			}
+		}
+		System.out.println("_____________________________________________________");
+	}
+	public boolean allTerminated(){
+		int terminated = 0 ; 
+		
+		for(Player p : playerList){
+			if(p.getTerminated()){
+				terminated++ ; 
+			}
+		}
+		if (terminated != this.numOfPlayer){
+			return false;
+		}
+		return true ;
+	}
 	
+	//.. need to set up the position of the palyer 
 	public static void main (String args[]){
 		Board b = new Board();
+		for(Card c:b.solution){
+			System.out.println("solution: "+c.getName()); 
+		}
+		
+		System.out.println("\tWelcome to the Cluedo game !!!");
+		while(!b.gameFinished){
+			int index = b.whoNext()  ;
+			Player p = playerList.get(index) ;
+			int n = index +1 ; 
+			System.out.println("\n*************************************************");
+			System.out.println("Player " + n + " turn");
+			p.turn(b.square, b.dice, b.solution , b.playerList);
+			System.out.println("\n*************************************************");
+			if(p.isWinner()){
+				System.out.println("\nGame Over!!! \n Player "+ n +" win the game!!!");
+			    b.gameFinished = true ; 
+			    break; 
+			}else if (b.allTerminated()){
+				System.out.println("Game Over!!! \n No one WON the game \n All got terminated!!! ");
+				b.gameFinished = true ; 
+				break; 
+			}
+			//b.printBoard(); 	
+		}
+		
+		/*// testing block 
 		for(Characters c: b.characterList){
 			System.out.println("characterList "+ c.getName()); 
 		}
@@ -373,23 +516,16 @@ public class Board {
 				System.out.print("|"+b.square[i][ia].getC());
 			}
 		}
-		try { // this is return true 
-//			Card n = new Card (new Room("kitchen"));
-//			Card fromlist = cardLeft.get(0); 
-//			System.out.println(fromlist.getName());
-//			Card n1 = new Card (new Characters("Miss_Scarlett"));
-//			System.out.println(n1.equals(fromlist)) ;
+		try { 
 			
 			Card n = new Card (new Room("kitchen"));
-			
 			Card n1 = new RoomCard (new Piece("kitchen", "Room"));
-		
-			System.out.println(n1.equals(n)) ;
+			//System.out.println(n1.equals(n)) ;
 		} catch (IllegalParameterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		
+		*/
 		
 	}
 }
