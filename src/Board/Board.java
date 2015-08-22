@@ -452,9 +452,9 @@ public class Board {
 	//.. need to set up the position of the palyer 
 	public static void main (String args[]){
 		Board b = new Board();
-		for(Card c:b.solution){
-			System.out.println("solution: "+c.getName()); 
-		}
+//		for(Card c:b.solution){
+//			System.out.println("solution: "+c.getName()); 
+//		}
 		
 		System.out.println("\tWelcome to the Cluedo game !!!");
 		while(!b.gameFinished){
